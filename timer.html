@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#000000">
+<title>Z3N0X — Coming Soon</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #000;
+    background-image: url("./timer.png");
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+
+    color: #fff;
+    min-height: 100vh;
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding: 80px clamp(24px, 10.4vw, 200px);
+    font-family: Arial, sans-serif;
+    overflow-x: hidden;
+}
+
+.titre-timer {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 100px;
+    gap: 0;
+    max-width: 100%;
+}
+
+.ready {
+    font-family: inherit;
+    font-size: clamp(2rem, 3.2vw, 4rem);
+    font-weight: 700;
+    letter-spacing: 0;
+}
+
+.salut {
+    font-size: clamp(2.5rem, 6.5vw, 8rem);
+    font-weight: 700;
+    line-height: 0.95;
+    margin-top: 0;
+    max-width: 100%;
+    overflow-wrap: anywhere;
+}
+
+.timer {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 15px;
+    text-align: center;
+    max-width: 100%;
+}
+
+.unite {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.nombre {
+    display: flex;
+    font-size: clamp(2.5rem, 4vw, 5rem);
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    line-height: 1.1;
+    height: 1.1em;
+    overflow: hidden;
+}
+
+.separateur {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    height: 5.5rem;
+    padding: 0 2px;
+    flex-shrink: 0;
+}
+
+.separateur i {
+    display: block;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background-color: white;
+    flex-shrink: 0;
+}
+
+.label {
+    font-size: 0.65rem;
+    letter-spacing: 2px;
+    color: #ccc;
+    white-space: nowrap;
+}
+
+.bonjour {
+    margin-top: 100px;
+    font-size: clamp(2.5rem, 3.2vw, 4rem);
+    font-weight: 700;
+}
+
+@media (min-width: 601px) and (max-width: 1000px) {
+    body {
+        padding: 60px 6vw;
+    }
+
+    .titre-timer {
+        margin-bottom: 80px;
+    }
+
+    .timer {
+        gap: 12px;
+    }
+
+    .nombre {
+        font-size: clamp(2.5rem, 5vw, 4rem);
+    }
+
+    .label {
+        font-size: 0.6rem;
+        letter-spacing: 1.5px;
+    }
+
+    .bonjour {
+        margin-top: 80px;
+    }
+}
+
+@media (max-width: 600px) {
+    body {
+        padding: 35px 20px;
+        overflow-x: hidden;
+        overflow-y: auto;
+        background-attachment: scroll;
+    }
+
+    .titre-timer {
+        margin-bottom: 65px;
+        width: 100%;
+    }
+
+    .ready {
+        font-size: clamp(1.8rem, 8vw, 2.5rem);
+    }
+
+    .salut {
+        font-size: clamp(2.4rem, 10vw, 4rem);
+        line-height: 1;
+        overflow-wrap: anywhere;
+    }
+
+    .timer {
+        display: grid;
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        align-items: start;
+        gap: 8px;
+        width: 100%;
+    }
+
+    .unite {
+        min-width: 0;
+        gap: 8px;
+    }
+
+    .nombre {
+        font-size: clamp(1.3rem, 5.8vw, 2.5rem);
+        justify-content: center;
+        width: 100%;
+    }
+
+    .separateur {
+        display: none;
+    }
+
+    .label {
+        font-size: clamp(0.42rem, 1.8vw, 0.6rem);
+        letter-spacing: 0.5px;
+        white-space: normal;
+        overflow-wrap: anywhere;
+    }
+
+    .bonjour {
+        margin-top: 75px;
+        font-size: clamp(2rem, 8vw, 2.8rem);
+    }
+}
+
+@media (max-width: 360px) {
+    body {
+        padding: 28px 12px;
+    }
+
+    .titre-timer {
+        margin-bottom: 55px;
+    }
+
+    .salut {
+        font-size: clamp(2rem, 9vw, 2.5rem);
+    }
+
+    .timer {
+        gap: 4px;
+    }
+
+    .nombre {
+        font-size: 1.25rem;
+    }
+
+    .label {
+        font-size: 0.4rem;
+        letter-spacing: 0;
+    }
+
+    .bonjour {
+        margin-top: 60px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .rouleau {
+        transition: none !important;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="titre-timer">
+    <div class="ready">Ready for</div>
+    <div class="salut">Z3N0X Portfolio?</div>
+</div>
+
+<div class="timer">
+
+    <div class="unite">
+        <div class="nombre" id="semaines">0</div>
+        <div class="label">SEMAINES</div>
+    </div>
+
+    <span class="separateur"><i></i><i></i></span>
+
+    <div class="unite">
+        <div class="nombre" id="jours">0</div>
+        <div class="label">JOURS</div>
+    </div>
+
+    <span class="separateur"><i></i><i></i></span>
+
+    <div class="unite">
+        <div class="nombre" id="heures">0</div>
+        <div class="label">HEURES</div>
+    </div>
+
+    <span class="separateur"><i></i><i></i></span>
+
+    <div class="unite">
+        <div class="nombre" id="minutes">0</div>
+        <div class="label">MINUTES</div>
+    </div>
+
+    <span class="separateur"><i></i><i></i></span>
+
+    <div class="unite">
+        <div class="nombre" id="secondes">0</div>
+        <div class="label">SECONDES</div>
+    </div>
+
+</div>
+
+<div class="bonjour">Coming Soon!</div>
+
+<script>
+const dateFin = new Date(2026, 10, 2, 18, 0, 0);
+
+function actualiserTimer() {
+    const maintenant = new Date();
+
+    let total = Math.max(
+        0,
+        Math.floor((dateFin.getTime() - maintenant.getTime()) / 1000)
+    );
+
+    const semaines = Math.floor(total / 604800);
+    total %= 604800;
+
+    const jours = Math.floor(total / 86400);
+    total %= 86400;
+
+    const heures = Math.floor(total / 3600);
+    total %= 3600;
+
+    const minutes = Math.floor(total / 60);
+    const secondes = total % 60;
+
+    afficher("semaines", semaines);
+    afficher("jours", jours);
+    afficher("heures", heures);
+    afficher("minutes", minutes);
+    afficher("secondes", secondes);
+}
+
+function afficher(id, valeur) {
+    const element = document.getElementById(id);
+    if (!element) return;
+
+    const texte = String(valeur).padStart(2, "0");
+
+    if (element.textContent !== texte) {
+        element.textContent = texte;
+    }
+}
+
+actualiserTimer();
+setInterval(actualiserTimer, 1000);
+</script>
+
+</body>
+<!--
+
+
+ ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣤⢔⣒⠂⣀⣀⣤⣄⣀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⣴⣿⠋⢠⣟⡼⣷⠼⣆⣼⢇⣿⣄⠱⣄
+⠀⠀⠀⠀⠀⠀⠀⠹⣿⡀⣆⠙⠢⠐⠉⠉⣴⣾⣽⢟⡰⠃
+⠀⠀⠀⠀⠀⠀⠀⠀⠈⢿⣿⣦⠀⠤⢴⣿⠿⢋⣴⡏⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⡙⠻⣿⣶⣦⣭⣉⠁⣿⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣷⠀⠈⠉⠉⠉⠉⠇⡟⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⢀⠀⠀⣘⣦⣀⠀⠀⣀⡴⠊⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠈⠙⠛⠛⢻⣿⣿⣿⣿⠻⣧⡀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠫⣿⠉⠻⣇⠘⠓⠂⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⢶⣾⣿⣿⣿⣿⣿⣶⣄⠀⠀⠀⣿⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠹⣿⣿⣿⣿⣿⣿⣿⣧⠀⢸⣿⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠈⠙⠻⢿⣿⣿⠿⠛⣄⢸⡇⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠘⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⡁⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⠁⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⡆⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢹⣷⠂⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠸⣿⡀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⠇⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠋⠀⠀⠀⠀⠀⠀⠀⠀ 
+
+
+ -->
+</html>
