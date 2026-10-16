@@ -243,7 +243,7 @@ body {
 </style>
 </head>
 
-<body>
+<body data-lancement="2026-11-02T17:00:00+01:00">
 
 <div class="titre-timer">
     <div class="ready">Ready for</div>
@@ -290,50 +290,190 @@ body {
 <div class="bonjour">Coming Soon!</div>
 
 <script>
-const dateFin = new Date(2026, 10, 2, 18, 0, 0);
+(function () {
+    "use strict";
 
-function actualiserTimer() {
-    const maintenant = new Date();
+    var lienDestination = "https://sh4d0w-boxx.github.io/New-Horizon/";
 
-    let total = Math.max(
-        0,
-        Math.floor((dateFin.getTime() - maintenant.getTime()) / 1000)
-    );
+    var dateLancement = heureParis(2026, 10, 2, 17, 0); 
 
-    const semaines = Math.floor(total / 604800);
-    total %= 604800;
+    function decalageParisMinutes(instant) {
+        var parties = {};
 
-    const jours = Math.floor(total / 86400);
-    total %= 86400;
+        new Intl.DateTimeFormat("en-US", {
+            timeZone: "Europe/Paris",
+            year: "numeric",
+            month: "2-digit",
+            day: "2-digit",
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit",
+            hour12: false
+        }).formatToParts(instant).forEach(function (partie) {
+            parties[partie.type] = partie.value;
+        });
 
-    const heures = Math.floor(total / 3600);
-    total %= 3600;
+        var heure = parseInt(parties.hour, 10) % 24; 
 
-    const minutes = Math.floor(total / 60);
-    const secondes = total % 60;
+        var commeUTC = Date.UTC(
+            parseInt(parties.year, 10),
+            parseInt(parties.month, 10) - 1,
+            parseInt(parties.day, 10),
+            heure,
+            parseInt(parties.minute, 10),
+            parseInt(parties.second, 10)
+        );
 
-    afficher("semaines", semaines);
-    afficher("jours", jours);
-    afficher("heures", heures);
-    afficher("minutes", minutes);
-    afficher("secondes", secondes);
-}
-
-function afficher(id, valeur) {
-    const element = document.getElementById(id);
-    if (!element) return;
-
-    const texte = String(valeur).padStart(2, "0");
-
-    if (element.textContent !== texte) {
-        element.textContent = texte;
+        return Math.round((commeUTC - instant.getTime()) / 60000);
     }
-}
 
-actualiserTimer();
-setInterval(actualiserTimer, 1000);
+    function heureParis(annee, moisIndex, jour, heure, minute) {
+        var reference = new Date(Date.UTC(annee, moisIndex, jour, 12, 0));
+        var decalage = decalageParisMinutes(reference);
+
+        return new Date(Date.UTC(annee, moisIndex, jour, heure, minute) - decalage * 60000);
+    }
+
+    var MS_PAR_SECONDE = 1000;
+    var MS_PAR_MINUTE = 60 * MS_PAR_SECONDE;
+    var MS_PAR_HEURE = 60 * MS_PAR_MINUTE;
+    var MS_PAR_JOUR = 24 * MS_PAR_HEURE;
+    var MS_PAR_SEMAINE = 7 * MS_PAR_JOUR;
+
+    var SEC_PAR_SEMAINE = MS_PAR_SEMAINE / MS_PAR_SECONDE; 
+    var SEC_PAR_JOUR = MS_PAR_JOUR / MS_PAR_SECONDE;       
+    var SEC_PAR_HEURE = MS_PAR_HEURE / MS_PAR_SECONDE;     
+    var SEC_PAR_MINUTE = MS_PAR_MINUTE / MS_PAR_SECONDE;   
+
+    var elements = {
+        semaines: document.getElementById("semaines"),
+        jours: document.getElementById("jours"),
+        heures: document.getElementById("heures"),
+        minutes: document.getElementById("minutes"),
+        secondes: document.getElementById("secondes")
+    };
+
+    var minuterie = null;           
+    var redirectionLancee = false;   
+
+    function afficher(element, valeur) {
+        if (!element) return;
+
+        var texte = (valeur < 10 ? "0" : "") + valeur;
+
+        // On n'ecrit dans le DOM que si la valeur a change : pas de
+        // recalcul de style / reflow inutile a chaque tick.
+        if (element.textContent !== texte) {
+            element.textContent = texte;
+        }
+    }
+
+    function afficherTout(resteMs) {
+        var total = Math.floor(resteMs / MS_PAR_SECONDE);
+
+        var semaines = Math.floor(total / SEC_PAR_SEMAINE);
+        total %= SEC_PAR_SEMAINE;
+
+        var jours = Math.floor(total / SEC_PAR_JOUR);
+        total %= SEC_PAR_JOUR;
+
+        var heures = Math.floor(total / SEC_PAR_HEURE);
+        total %= SEC_PAR_HEURE;
+
+        var minutes = Math.floor(total / SEC_PAR_MINUTE);
+        var secondes = total % SEC_PAR_MINUTE;
+
+        afficher(elements.semaines, semaines);
+        afficher(elements.jours, jours);
+        afficher(elements.heures, heures);
+        afficher(elements.minutes, minutes);
+        afficher(elements.secondes, secondes);
+    }
+
+    function rediriger() {
+        if (redirectionLancee) return;
+        redirectionLancee = true;
+
+        if (minuterie !== null) {
+            window.clearTimeout(minuterie);
+            minuterie = null;
+        }
+
+        window.location.replace(lienDestination);
+    }
+
+    function actualiserTimer() {
+        // Date invalide : on n'affiche pas "NaN" a l'ecran.
+        if (isNaN(dateLancement.getTime())) {
+            return;
+        }
+
+        var difference = dateLancement.getTime() - Date.now();
+
+        if (difference <= 0) {
+            rediriger();
+            return;
+        }
+
+        afficherTout(difference);
+    }
+
+    function planifierProchainTick() {
+        var maintenant = Date.now();
+        var delai = MS_PAR_SECONDE - (maintenant % MS_PAR_SECONDE) + 5; // +5 ms de marge
+
+        minuterie = window.setTimeout(function () {
+            actualiserTimer();
+            if (!redirectionLancee) {
+                planifierProchainTick();
+            }
+        }, delai);
+    }
+
+
+    function demarrer() {
+        actualiserTimer();
+
+        if (!redirectionLancee) {
+            planifierProchainTick();
+        }
+    }
+
+    document.addEventListener("visibilitychange", function () {
+        if (document.visibilityState === "visible") {
+            actualiserTimer();
+            if (!redirectionLancee && minuterie === null) {
+                planifierProchainTick();
+            }
+        }
+    });
+
+    window.addEventListener("pageshow", function () {
+        actualiserTimer();
+    });
+
+    if (/[?&]debug=1/.test(window.location.search)) {
+        var enParis = new Intl.DateTimeFormat("fr-FR", {
+            timeZone: "Europe/Paris",
+            dateStyle: "full",
+            timeStyle: "medium",
+            hour12: false
+        }).format(dateLancement);
+
+        var enLocal = new Intl.DateTimeFormat("fr-FR", {
+            dateStyle: "full",
+            timeStyle: "medium",
+            hour12: false
+        }).format(dateLancement);
+
+        console.log("[timer] cible UTC    :", dateLancement.toISOString());
+        console.log("[timer] cible Paris  :", enParis);
+        console.log("[timer] cible locale :", enLocal);
+    }
+
+    demarrer();
+})();
 </script>
-
 </body>
 <!--
 
