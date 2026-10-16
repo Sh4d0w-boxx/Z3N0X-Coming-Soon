@@ -361,8 +361,6 @@ body {
 
         var texte = (valeur < 10 ? "0" : "") + valeur;
 
-        // On n'ecrit dans le DOM que si la valeur a change : pas de
-        // recalcul de style / reflow inutile a chaque tick.
         if (element.textContent !== texte) {
             element.textContent = texte;
         }
@@ -403,7 +401,6 @@ body {
     }
 
     function actualiserTimer() {
-        // Date invalide : on n'affiche pas "NaN" a l'ecran.
         if (isNaN(dateLancement.getTime())) {
             return;
         }
@@ -420,7 +417,7 @@ body {
 
     function planifierProchainTick() {
         var maintenant = Date.now();
-        var delai = MS_PAR_SECONDE - (maintenant % MS_PAR_SECONDE) + 5; // +5 ms de marge
+        var delai = MS_PAR_SECONDE - (maintenant % MS_PAR_SECONDE) + 5; 
 
         minuterie = window.setTimeout(function () {
             actualiserTimer();
